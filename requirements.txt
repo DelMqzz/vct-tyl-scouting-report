@@ -1,0 +1,5 @@
+vlrdevapi
+pandas
+matplotlib
+jupyter
+nbformat
