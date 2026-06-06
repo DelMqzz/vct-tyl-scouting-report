@@ -6,17 +6,15 @@ import sys
 from datetime import datetime
 import vlrdevapi as vlr
 
-# ----------------------------------------------------------------------
-# 配置区 —— 所有可调参数集中在这里，不要散落到下面的逻辑里
-# ----------------------------------------------------------------------
-TEAM_QUERY = "TYLOO"          # 搜索用的队名。TYL 在 VLR 上的注册名是 TYLOO
-SEASON_KEYWORDS = ["2026"]    # 只保留对局名里含这些关键词的比赛 (过滤赛季)
+
+TEAM_QUERY = "TYLOO"          
+SEASON_KEYWORDS = ["2026"]    
 RAW_DIR = "data/raw"
 SERIES_DIR = os.path.join(RAW_DIR, "series")
 
-REQUEST_DELAY = 2.0           # 每次请求后 sleep 的秒数。务必保留，别把 VLR 请求爆了
-MAX_RETRIES = 3               # 单个请求失败后的重试次数
-RETRY_BACKOFF = 5.0           # 重试前的等待秒数
+REQUEST_DELAY = 2.0           
+MAX_RETRIES = 3              
+RETRY_BACKOFF = 5.0           
 
 
 # ----------------------------------------------------------------------
@@ -55,7 +53,7 @@ def with_retry(fn, *args, label="", **kwargs):
 
 
 # ----------------------------------------------------------------------
-# STEP 0 —— 连通性 & 搜到 TYL。第一次跑务必先确认这一步通过。
+# STEP 0 —— 连通性 & 搜到 TYL。
 # ----------------------------------------------------------------------
 def step0_find_team():
     print("[STEP 0] 搜索 TYL 队伍 ID ...")
@@ -65,7 +63,6 @@ def step0_find_team():
         sys.exit(1)
 
     # TODO[实测确认]: 打印 results，确认每个结果对象上"队伍 ID"和"队名"的字段名。
-    #                 下面假定字段为 .id 和 .name —— 按实际返回修改。
     for r in results:
         print("   候选:", r)
     team = results[0]
@@ -119,7 +116,7 @@ def step3_series_detail(match_list):
         match_id = getattr(m, "id", None) or getattr(m, "match_id", None)
         out_path = os.path.join(SERIES_DIR, f"{match_id}.json")
 
-        # 断点续抓:已存在就跳过。脚本中途挂掉重跑不会重复抓。
+        # 断点续抓
         if os.path.exists(out_path):
             print(f"  [{i}/{len(match_list)}] {match_id} 已存在，跳过")
             continue
@@ -136,7 +133,6 @@ def step3_series_detail(match_list):
 
 # ----------------------------------------------------------------------
 def main():
-    # 礼貌限速:也可用库自带的全局限速配置
     try:
         vlr.configure_rate_limit(requests_per_second=0.5)
     except Exception:
