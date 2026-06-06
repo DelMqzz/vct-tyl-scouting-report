@@ -15,6 +15,20 @@ TYL 是 FPX 在 2026 VCT CN 启点赛首轮的实际对手。本项目站在 FPX
 - **Haven 是出场最多但守不住的"决胜图陷阱"。** 出场 16 次最高,胜率却只有 **43.8%**,防守半场仅 **39%**,FPX 若拿到 Haven 选边权应坚决选进攻。
 - **体系偏进攻型,核心吃个人发挥。** 整体进攻胜率 55.2%、防守 48.0%,反 CN 赛区"偏架枪"传统印象;Yoru 异常高使用率(19 次,排名第 5)指向核心 duelist 个人能力依赖。
 
+### 几张关键图
+
+**TYL 各地图出场与胜率** —— Pearl(12.5%)、Haven(43.8%)是漏洞,Bind(75%)、Breeze(100%)是本命:
+
+![地图出场与胜率](figures/01a_map_pool.png)
+
+**TYL 各地图攻防强弱** —— Bind 防守 68% 全图最高;Haven 攻 57 防 39 是典型"决胜图陷阱";Pearl 攻防双弱:
+
+![攻防散点图](figures/03b_atk_def_by_map.png)
+
+**TYL 主动 ban / pick 倾向** —— Lotus 主动 ban 13 次、Pearl 9 次,BP 习惯极其鲜明,但 ban 位不够补 Pearl 的漏洞:
+
+![BP 倾向](figures/01b_pickban.png)
+
 完整结论与 BP 建议见 [`TYL_Scouting_Report.pdf`](TYL_Scouting_Report.pdf) 或 [`analysis.ipynb`](analysis.ipynb) 第 7 节。
 
 ## 数据与方法
@@ -62,7 +76,7 @@ jupyter notebook analysis.ipynb
 
 - **vlrdevapi 字段名以实测为准。** 初版脚本基于文档假设字段名为 `event`,实测发现真实字段为 `tournament_name` 和 `match_datetime`;同时 `tournament_name` 命名不统一(有 "VCT 2026"、"CN EVO 26" 等多种格式),最终改为按 `match_datetime.year` 过滤赛季,更可靠。
 - **抓取中断与断点续抓。** vlrdevapi 是非官方爬虫封装,依赖 VLR 页面结构,网络波动下偶有失败。脚本里加了:每个 series 抓完立即落地存盘、已存在则跳过、单请求失败重试 3 次、全程限速 —— 中断后只需重跑,不会丢已抓数据。
-- **首杀数据不可得。** vlrdevapi 返回字段中 fk/fd/adr/kast 等细颗粒度数据为 null,因此原计划的"首杀转化率"维度改为"手枪局胜率",数据稳定可靠。
+- **首杀数据不可得。** vlrdevapi 返回字段中 fk / fd / adr / kast 等细颗粒度数据为 null,因此原计划的"首杀转化率"维度改为"手枪局胜率",数据稳定可靠。
 
 ## 局限说明
 
